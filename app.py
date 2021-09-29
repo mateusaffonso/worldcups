@@ -28,11 +28,11 @@ def hello_world_html():
 
 
 @app.route("/")
-def index():
+def films():
     with connection.cursor() as cursor:
         query_args = []
         if request.args.get("search"):
-            sql = "SELECT * FROM `films` WHERE `title` LIKE %s or `director` LIKE %s"
+            sql = "SELECT * FROM `films` WHERE LOWER(`title`) LIKE LOWER(%s) or LOWER(`director`) LIKE LOWER(%s)"
             search = "%{}%".format(request.args["search"])
             query_args = [search, search]
         else:
@@ -48,7 +48,7 @@ def planets():
     with connection.cursor() as cursor:
         query_args = []
         if request.args.get("search"):
-            sql = "SELECT * FROM `planet` WHERE `name` LIKE %s ORDER BY `name` ASC"
+            sql = "SELECT * FROM `planet` WHERE LOWER(`name`) LIKE LOWER(%s) ORDER BY `name` ASC"
             search = "%{}%".format(request.args["search"])
             query_args = [search]
         else:
@@ -59,14 +59,14 @@ def planets():
     return render_template("planets.html", planets=planets, search=request.args.get("search"))
 
 
-@app.route("/persons")
-def persons():
+@app.route("/people")
+def people():
     with connection.cursor() as cursor:
         query_args = []
         query_extra = ""
         if request.args.get("search"):
             query_extra = """
-                WHERE `name` LIKE %s
+                WHERE LOWER(`name`) LIKE LOWER(%s)
             """
             search = "%{}%".format(request.args["search"])
             query_args = [search]
@@ -83,7 +83,7 @@ def persons():
             """.format(query_extra)
         cursor.execute(sql, query_args)
         result = cursor.fetchall()
-    return render_template("persons.html", persons=result, search=request.args.get("search"))
+    return render_template("people.html", people=result, search=request.args.get("search"))
 
 
 if __name__ == "__main__":
