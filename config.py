@@ -10,3 +10,5 @@ DATABASE_USER = _database_conf.get("username")
 DATABASE_PASSWORD = _database_conf.get("password")
 DATABASE_HOST = _database_conf.get("host", "localhost")
 DATABASE_PORT = _database_conf.get("port", 3306)
+
+DEGUB = _config.get("debug", False)
