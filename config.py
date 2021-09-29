@@ -3,8 +3,10 @@ import yaml
 with open("config.yaml") as file:
     _config = yaml.load(file, Loader=yaml.FullLoader)
 
-DATABASE_NAME = _config.get("database", {}).get("name")
-DATABASE_USER = _config.get("database", {}).get("username")
-DATABASE_PASSWORD = _config.get("database", {}).get("password")
-DATABASE_HOST = _config.get("database", {}).get("host", "localhost")
-DATABASE_PORT = _config.get("database", {}).get("port", 3306)
+_database_conf = _config.get("database", {})
+
+DATABASE_NAME = _database_conf.get("name")
+DATABASE_USER = _database_conf.get("username")
+DATABASE_PASSWORD = _database_conf.get("password")
+DATABASE_HOST = _database_conf.get("host", "localhost")
+DATABASE_PORT = _database_conf.get("port", 3306)
