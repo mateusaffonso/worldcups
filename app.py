@@ -16,6 +16,9 @@ connection = pymysql.connect(
 )
 app = Flask(__name__)
 
+app.config['MYSQL_UNIX_SOCKET'] = 'TCP'
+#Especifica que a conexão é remota, para poder conseguir conectar ao WSL (https://superuser.com/questions/1354350/how-to-connect-to-mysql-running-on-xampp-through-wsl-terminal)
+
 
 @app.route("/hello_world")
 def hello_world():

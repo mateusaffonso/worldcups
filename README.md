@@ -1,4 +1,4 @@
-
+## Orientações do Projeto StarWars
 Você precisa ter o mysql instalado e executando.
 
 Eu recomendo [criar uma virtual-env em python](https://docs.python.org/pt-br/3/library/venv.html) para installar o projeto
@@ -22,3 +22,5 @@ Após essas etapas, você pode rodar o projeto com :
 $ python app.py
 ```
 
+## Orientações do Projeto FIFA
+...
