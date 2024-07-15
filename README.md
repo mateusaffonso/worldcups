@@ -33,4 +33,11 @@ $ python app.py
 
 [Documentação](https://docs.google.com/document/d/17qOWRfYog9Y8ruOXzzrAD5BVnU_-JRKM/edit?usp=sharing&ouid=111957843050007930631&rtpof=true&sd=true)
 
+| Ferramentas Utilizadas |
+| :-----------------------:|
+| Flask |
+|PyMySQL|
+| MySQL |
+| HTML  |
+
 Projeto desenvolvido pelos alunos: [Cristina Souza](https://www.linkedin.com/in/cris-tina/), [Thiago Barcelos](https://www.linkedin.com/in/thiago-barcellos), [Victor Lima](https://www.linkedin.com/in/victorplima/) e [Mateus Augusto](https://www.linkedin.com/in/mateusaffonso/) para a matéria de Banco de dados do Bacharelado em Ciência da Computação pela UFRJ.
