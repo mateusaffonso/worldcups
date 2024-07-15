@@ -1,6 +1,5 @@
 database:
-  name: "StarWars"
-  username: "root"
-  password: "root"
-
+  name: 'FIFA2'
+  username: 'root'
+  password: 'admin'
 #  debug: true

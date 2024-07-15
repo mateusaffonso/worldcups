@@ -1,22 +1,27 @@
-{% extends "base.html" %}
-{% block title %} Films - Star Wars DB {% endblock %}
-{% block content %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Director</th>
-        <th scope="col">Release Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for film in films %}
-        <tr>
-          <th scope="row">{{ film.Title | title }}</th>
-          <td>{{ film.Director | title }}</td>
-          <td>{{ film.ReleaseDate.year }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+{% extends "base.html" %} {% block title %} WorldCups {% endblock %} {% block
+content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Year</th>
+      <th scope="col">Host</th>
+      <th scope="col">Num teams</th>
+      <th scope="col">Total Games</th>
+      <th scope="col">Goals Scored</th>
+      <th scope="col">Champion</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for worldcup in worldcups %}
+    <tr>
+      <th scope="row">{{ worldcup.cupYear or "unknown" }}</th>
+      <td>{{ worldcup.host or "unknown" }}</td>
+      <td>{{ worldcup.numTeams or "unknown"}}</td>
+      <td>{{ worldcup.numTotalGames or "unknown"}}</td>
+      <td>{{ worldcup.goalsScored or "unknown"}}</td>
+      <td>{{ worldcup.champion or "unknown"}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

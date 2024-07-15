@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Games' Goals{% endblock %}
+{% block content %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">gameDate</th>
+        <th scope="col">City</th>
+        <th scope="col">HomeTeamName</th>
+        <th scope="col">HomeScore Year</th>
+        <th scope="col">awayTeamName</th>
+        <th scope="col">awayScore</th>
+        <th scope="col">scorer</th>
+        <th scope="col">goalMinute</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for gamegoal in gamegoals %}
+        <tr>
+          <th scope="row">{{ gamegoal.gameDate }}</th>
+          <td>{{ gamegoal.city }}</td>
+          <td>{{ gamegoal.homeTeamName }}</td>
+          <td>{{ gamegoal.homeScore }}</td>
+          <td>{{ gamegoal.awayTeamName }}</td>
+          <td>{{ gamegoal.awayScore }}</td>
+          <td>{{ gamegoal.scorer }}</td>
+          <td>{{ gamegoal.goalMinute }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

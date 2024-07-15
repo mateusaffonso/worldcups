@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block title %} Never Won {% endblock %} {% block
+content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Team</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for neverwon in neverwons %}
+    <tr>
+      <th scope="row">{{ neverwon.teamName}}</th>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -20,74 +20,136 @@ app.config['MYSQL_UNIX_SOCKET'] = 'TCP'
 #Especifica que a conexão é remota, para poder conseguir conectar ao WSL (https://superuser.com/questions/1354350/how-to-connect-to-mysql-running-on-xampp-through-wsl-terminal)
 
 
-@app.route("/hello_world")
-def hello_world():
-    return "<p>Hello, World!</p>"
-
-
-@app.route("/hello_world_html")
-def hello_world_html():
-    return render_template("hello.html")
-
-
 @app.route("/")
-def films():
+def worldcups():
     with connection.cursor() as cursor:
         query_args = []
         if request.args.get("search"):
-            sql = "SELECT * FROM `films` WHERE LOWER(`title`) LIKE LOWER(%s) or LOWER(`director`) LIKE LOWER(%s)"
+            sql = """ SELECT * FROM `WorldCup` WHERE LOWER(`host`) LIKE LOWER(%s) or `cupYear` LIKE (%s) ORDER BY 'cupYear' DESC """
             search = "%{}%".format(request.args["search"])
             query_args = [search, search]
         else:
-            sql = "SELECT * FROM `films`"
+            sql = "SELECT * FROM `WorldCup`"
         cursor.execute(sql, query_args)
-        films = cursor.fetchall()
+        worldcups = cursor.fetchall()
 
-    return render_template("index.html", films=films, search=request.args.get("search"))
+    return render_template("index.html", worldcups=worldcups, search=request.args.get("search"))
 
 
-@app.route("/planets")
-def planets():
+@app.route("/teams")
+def teams():
     with connection.cursor() as cursor:
         query_args = []
         if request.args.get("search"):
-            sql = "SELECT * FROM `planet` WHERE LOWER(`name`) LIKE LOWER(%s) ORDER BY `name` ASC"
+            sql = "SELECT * FROM `Team` WHERE LOWER(`teamName`) LIKE LOWER(%s) ORDER BY 'numCupsWon' DESC"
             search = "%{}%".format(request.args["search"])
             query_args = [search]
         else:
-            sql = "SELECT * FROM `planet` ORDER BY `name` ASC"
+            sql = "SELECT * FROM `Team` ORDER BY `numCupsWon` DESC"
         cursor.execute(sql, query_args)
-        planets = cursor.fetchall()
+        teams = cursor.fetchall()
 
-    return render_template("planets.html", planets=planets, search=request.args.get("search"))
+    return render_template("teams.html", teams=teams, search=request.args.get("search"))
 
 
-@app.route("/people")
-def people():
+@app.route("/gamegoals")
+def gamegoals():
     with connection.cursor() as cursor:
         query_args = []
-        query_extra = ""
         if request.args.get("search"):
-            query_extra = """
-                WHERE LOWER(`name`) LIKE LOWER(%s)
+            sql = """
+                SELECT
+                    `Game`.`gameDate`,`Game`.`city`,`Game`.`homeTeamName`, `Game`.`homeScore`, `Game`.`awayTeamName`, `Game`.`awayScore`, `Goal`.`scorer`, `Goal`.`goalMinute`
+                FROM
+                    `Game`
+                LEFT JOIN
+                    `Goal` ON `Game`.`gameDate` = `Goal`.`gameDate` AND (`Game`.`homeTeamName` = `Goal`.`teamName` OR `Game`.`awayTeamName` = `Goal`.`teamName`)
+                WHERE `Goal`.`scorer` LIKE LOWER(%s) ORDER BY Game.gameDate DESC;
+                """
+            search = "%{}%".format(request.args["search"])
+            query_args = [search]
+        else:
+            sql = """
+                SELECT
+                    `Game`.`gameDate`,`Game`.`city`,`Game`.`homeTeamName`, `Game`.`homeScore`, `Game`.`awayTeamName`, `Game`.`awayScore`, `Goal`.`scorer`, `Goal`.`goalMinute`
+                FROM
+                    `Game`
+                LEFT JOIN
+                    `Goal` ON `Game`.`gameDate` = `Goal`.`gameDate` AND (`Game`.`homeTeamName` = `Goal`.`teamName` OR `Game`.`awayTeamName` = `Goal`.`teamName`) ORDER BY Game.gameDate DESC;
+                """
+        cursor.execute(sql, query_args)
+        gamegoals = cursor.fetchall()
+    return render_template("gamegoals.html", gamegoals=gamegoals, search=request.args.get("search"))
+
+@app.route("/totalgoals")
+def totalgoals():
+    with connection.cursor() as cursor:
+        query_args = []
+        if request.args.get("search"):
+            sql = """
+            SELECT 
+                `teamName`, 
+                COUNT(*) AS `totalGoals` 
+            FROM 
+                `Goal`
+            WHERE 
+                `teamName` LIKE LOWER(%s)
+            GROUP BY 
+                `teamName`
+            ORDER BY 
+                `totalGoals` DESC;
             """
             search = "%{}%".format(request.args["search"])
             query_args = [search]
-        sql = """
-            SELECT
-                `person`.*,
-                `eyeColor`.`Color` as ColorOfEyes,
-                (select `Name` from planet where `ID`=`HomeWorld`) as `HomeWorldName`,
-                (select `Name` from `species` WHERE `ID`=`species`) as `SpecieName`
-            FROM `person`
-            INNER JOIN `eyeColor` ON `person`.`EyeColor` = `eyeColor`.`ID`
-            {}
-            ORDER BY `name` ASC
-            """.format(query_extra)
+        else:
+            sql = """
+            SELECT 
+                `teamName`, 
+                COUNT(*) AS `totalGoals` 
+            FROM 
+                `Goal`
+            GROUP BY 
+                `teamName`
+            ORDER BY 
+                `totalGoals` DESC;
+            """
         cursor.execute(sql, query_args)
-        result = cursor.fetchall()
-    return render_template("people.html", people=result, search=request.args.get("search"))
+        totalgoals = cursor.fetchall()
 
+    return render_template("totalgoals.html", totalgoals=totalgoals, search=request.args.get("search"))
+
+@app.route("/neverwon")
+def neverwons():
+    with connection.cursor() as cursor:
+        query_args = []
+        if request.args.get("search"):
+            sql = """
+            SELECT 
+                `teamName` 
+            FROM 
+                `Team` 
+            WHERE 
+                `numCupsWon`= '0'  AND (`teamName` LIKE (%s))
+            ORDER BY 
+                `teamName` ASC;
+            """
+            search = "%{}%".format(request.args["search"])
+            query_args = [search]
+        else:
+            sql = """
+            SELECT 
+                `teamName` 
+            FROM 
+                `Team` 
+            WHERE 
+                `numCupsWon`= '0'
+            ORDER BY 
+                `teamName` ASC;
+            """
+        cursor.execute(sql, query_args)
+        neverwons = cursor.fetchall()
+
+    return render_template("neverwon.html", neverwons=neverwons, search=request.args.get("search"))
 
 if __name__ == "__main__":
     app.run(debug=config.DEGUB)
