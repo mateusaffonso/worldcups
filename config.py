@@ -13,3 +13,5 @@ DATABASE_HOST = _database_conf.get("host", "localhost")
 DATABASE_PORT = _database_conf.get("port", 3306)
 
 DEGUB = _config.get("debug", False)
+
+#Arquivo feito para manter as configurações de toda conexão com o endereço do website e o banco de dados
